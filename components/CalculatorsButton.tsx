@@ -52,7 +52,7 @@ export default function CalculatorMenuButton() {
         <div className="bg-[#18181b] p-4 rounded-xl shadow-xl space-y-3 transition-all w-48">
           <button
             onClick={() => handleNavigate("/SIPCalculator")}
-            className="text-white bg-blue-600 hover:bg-blue-700 font-semibold px-4 py-2 rounded-lg w-full cursor-pointer"
+            className="text-white bg-purple-600 hover:bg-purple-700 font-semibold px-4 py-2 rounded-lg w-full cursor-pointer"
           >
             SIP Calculator
           </button>
