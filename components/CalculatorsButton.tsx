@@ -62,6 +62,12 @@ export default function CalculatorMenuButton() {
           >
             ROI Calculator
           </button>
+          <button
+            onClick={() => handleNavigate("/EMICalculator")}
+            className="text-white bg-purple-600 hover:bg-purple-700 font-semibold px-4 py-2 rounded-lg w-full cursor-pointer"
+          >
+            EMI Calculator
+          </button>
         </div>
       )}
 
