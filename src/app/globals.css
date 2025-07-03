@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* === Base Styles === */
+html,
+body {
+  width: 100dvw;
+  overflow-x: hidden;
+  background-color: #18181b;
+  color: white;
+  scroll-behavior: smooth;
+}
+
+.clip-corner {
+  clip-path: polygon(40% 0%, 100% 0%, 100% 60%);
+}
+
+/* globals.css */
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scroll-hidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+  border-radius: 9999px;
+  border: none;
+}
+
+::-webkit-scrollbar-track {
+  background: #eff6ff;
+}
+
+/* === Animations === */
+@theme inline {
+  --animate-scroll-feature: scroll-feature var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite;
+
+  @keyframes scroll-feature {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+}
+
+/* Scroll Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+/* Gradient Background Animation */
+@keyframes gradient {
+  0% {
+    background-position: top right;
+  }
+  50% {
+    background-position: bottom left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradient 3s ease infinite;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+/* Utility: Animation Delay */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+@keyframes scroll-testimonial {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scroll-reverse {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll-testimonial linear infinite;
+}
+
+.animate-scroll-reverse {
+  animation: scroll-reverse linear infinite;
+}
