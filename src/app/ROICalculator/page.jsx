@@ -15,20 +15,25 @@ import {
 } from "recharts";
 
 export default function ROICalculatorApp() {
-  const [entry, setEntry] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [entry, setEntry] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [investment, setInvestment] = useState(0);
   const [targetPrice, setTargetPrice] = useState("");
   const [stoplossPrice, setStoplossPrice] = useState("");
   const [levels, setLevels] = useState([]);
 
-  // Recalculate investment when entry or quantity changes
   useEffect(() => {
-    setInvestment(entry * quantity);
+    const entryNum = parseFloat(entry);
+    const quantityNum = parseFloat(quantity);
+    if (!isNaN(entryNum) && !isNaN(quantityNum)) {
+      setInvestment(entryNum * quantityNum);
+    } else {
+      setInvestment(0);
+    }
   }, [entry, quantity]);
 
   const calculateROI = (price) => {
-    const netProfit = (price - entry) * quantity;
+    const netProfit = (price - parseFloat(entry || 0)) * parseFloat(quantity || 0);
     const roi = investment !== 0 ? (netProfit / investment) * 100 : 0;
     return {
       netProfit,
@@ -64,53 +69,66 @@ export default function ROICalculatorApp() {
     setStoplossPrice("");
   };
 
+  const handleReset = () => {
+    setEntry("");
+    setQuantity("");
+    setInvestment(0);
+    setTargetPrice("");
+    setStoplossPrice("");
+    setLevels([]);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center pt-50 pb-20 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-30 px-4">
       <div className="bg-white shadow-xl rounded-2xl p-6 md:p-8 w-full max-w-6xl text-center text-slate-800">
-        <h2 className="text-3xl font-bold mb-8 text-purple-600">
-          ROI Calculator
-        </h2>
+        <h2 className="text-3xl font-bold mb-8 text-purple-600">ROI Calculator</h2>
 
         {/* Input Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          {[
-            {
-              label: "Entry Price",
-              value: entry,
-              onChange: (e) => setEntry(parseFloat(e.target.value) || 0),
-            },
-            {
-              label: "Quantity",
-              value: quantity,
-              onChange: (e) => setQuantity(parseInt(e.target.value) || 0),
-            },
-            {
-              label: "Total Investment",
-              value: investment,
-              onChange: (e) => setInvestment(parseFloat(e.target.value) || 0),
-            },
-          ].map(({ label, value, onChange }, idx) => (
-            <div key={idx}>
-              <label className="block font-semibold mb-1">{label}</label>
-              <input
-                type="number"
-                value={value || ""}
-                onChange={onChange}
-                className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-          ))}
+          <div>
+            <label className="block font-semibold mb-1">Entry Price</label>
+            <input
+              type="number"
+              value={entry}
+              onChange={(e) =>
+                setEntry(e.target.value === "" ? "" : Number(e.target.value))
+              }
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold mb-1">Quantity</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) =>
+                setQuantity(e.target.value === "" ? "" : Number(e.target.value))
+              }
+              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold mb-1">Total Investment</label>
+            <input
+              type="number"
+              value={investment}
+              readOnly
+              className="w-full bg-gray-100 border border-gray-300 px-4 py-2 rounded-lg"
+            />
+          </div>
         </div>
 
-        {/* Level Inputs */}
+        {/* Target & Stoploss Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div>
             <label className="block font-semibold mb-1">Target Price</label>
             <input
               type="number"
               value={targetPrice}
-              onChange={(e) => setTargetPrice(e.target.value)}
-              placeholder="e.g. 60"
+              onChange={(e) =>
+                setTargetPrice(e.target.value === "" ? "" : Number(e.target.value))
+              }
+              placeholder="e.g. 150"
               className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-green-400"
             />
           </div>
@@ -119,17 +137,25 @@ export default function ROICalculatorApp() {
             <input
               type="number"
               value={stoplossPrice}
-              onChange={(e) => setStoplossPrice(e.target.value)}
-              placeholder="e.g. 40"
+              onChange={(e) =>
+                setStoplossPrice(e.target.value === "" ? "" : Number(e.target.value))
+              }
+              placeholder="e.g. 90"
               className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-400"
             />
           </div>
-          <div className="flex items-end">
+          <div className="flex flex-col justify-end gap-2">
             <button
               onClick={handleAddLevel}
               className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
             >
               Submit
+            </button>
+            <button
+              onClick={handleReset}
+              className="w-full bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+            >
+              Reset
             </button>
           </div>
         </div>
@@ -152,9 +178,7 @@ export default function ROICalculatorApp() {
                   return (
                     <tr key={idx} className="border-t">
                       <td className="px-4 py-2">{level.label}</td>
-                      <td className="px-4 py-2 text-right">
-                        ₹{level.price.toFixed(2)}
-                      </td>
+                      <td className="px-4 py-2 text-right">₹{level.price.toFixed(2)}</td>
                       <td
                         className={`px-4 py-2 text-right ${
                           netProfit >= 0 ? "text-green-600" : "text-red-500"
@@ -228,11 +252,7 @@ export default function ROICalculatorApp() {
                         .map((entry, index) => (
                           <Cell
                             key={`cell-${index}`}
-                            fill={
-                              entry.netProfit >= 0
-                                ? "#22C55E" // green
-                                : "#EF4444" // red
-                            }
+                            fill={entry.netProfit >= 0 ? "#22C55E" : "#EF4444"}
                           />
                         ))}
                     </Pie>

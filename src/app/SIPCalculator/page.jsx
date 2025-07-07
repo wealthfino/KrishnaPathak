@@ -2,7 +2,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Calculator, IndianRupeeIcon, Calendar, Percent } from "lucide-react";
+import {
+  Calculator,
+  IndianRupeeIcon,
+  Calendar,
+  Percent,
+  RotateCw,
+} from "lucide-react";
 import Chart from "chart.js/auto";
 
 function SIPCalculator() {
@@ -18,6 +24,8 @@ function SIPCalculator() {
   const pieChartInstance = useRef(null);
 
   const calculateSIP = () => {
+    if (!monthlyAmount || !years || !expectedReturn) return;
+
     const monthlyRate = expectedReturn / 100 / 12;
     const totalMonths = years * 12;
     const totalInvested = monthlyAmount * totalMonths;
@@ -153,7 +161,9 @@ function SIPCalculator() {
               label: (context) => {
                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
                 const percent = ((context.parsed / total) * 100).toFixed(1);
-                return `${context.label}: ₹${context.parsed.toLocaleString("en-IN")} (${percent}%)`;
+                return `${context.label}: ₹${context.parsed.toLocaleString(
+                  "en-IN"
+                )} (${percent}%)`;
               },
             },
           },
@@ -163,8 +173,12 @@ function SIPCalculator() {
     });
   };
 
+  // Debounced calculation
   useEffect(() => {
-    if (monthlyAmount && years && expectedReturn) calculateSIP();
+    const timeout = setTimeout(() => {
+      if (monthlyAmount && years && expectedReturn) calculateSIP();
+    }, 300);
+    return () => clearTimeout(timeout);
   }, [monthlyAmount, years, expectedReturn]);
 
   useEffect(() => {
@@ -181,6 +195,17 @@ function SIPCalculator() {
       if (pieChartInstance.current) pieChartInstance.current.destroy();
     };
   }, []);
+
+  const resetForm = () => {
+    setMonthlyAmount(5000);
+    setYears(10);
+    setExpectedReturn(12);
+    setResults(null);
+    setYearlyData([]);
+
+    if (lineChartInstance.current) lineChartInstance.current.destroy();
+    if (pieChartInstance.current) pieChartInstance.current.destroy();
+  };
 
   const formatCurrency = (amount) => "₹" + amount.toLocaleString("en-IN");
 
@@ -204,15 +229,24 @@ function SIPCalculator() {
           {/* Input Panel */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 ring-2 ring-blue-200 ring-offset-2">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-                <IndianRupeeIcon className="w-5 h-5 mr-2 text-blue-600" />
-                Investment Details
-              </h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+                  <IndianRupeeIcon className="w-5 h-5 mr-2 text-blue-600" />
+                  Investment Details
+                </h2>
+                <button
+                  onClick={resetForm}
+                  className="flex items-center text-blue-600 text-sm hover:underline"
+                >
+                  <RotateCw className="w-4 h-4 mr-1" />
+                  Reset
+                </button>
+              </div>
 
               <div className="space-y-6">
-                {/* Monthly Investment */}
+                {/* Monthly Amount */}
                 <div>
-                  <label className="flex text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Monthly Investment Amount
                   </label>
                   <input
@@ -221,15 +255,10 @@ function SIPCalculator() {
                     min="100"
                     max="500000"
                     step="500"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === "") {
-                        setMonthlyAmount("");
-                      } else {
-                        setMonthlyAmount(Number(value));
-                      }
-                    }}
-                    className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 text-lg"
+                    onChange={(e) =>
+                      setMonthlyAmount(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-lg text-black"
                   />
                   <input
                     type="range"
@@ -237,21 +266,14 @@ function SIPCalculator() {
                     max="500000"
                     step="500"
                     value={monthlyAmount}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === "") {
-                        setMonthlyAmount("");
-                      } else {
-                        setMonthlyAmount(Number(value));
-                      }
-                    }}
+                    onChange={(e) => setMonthlyAmount(Number(e.target.value))}
                     className="w-full mt-2 h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                   />
                 </div>
 
                 {/* Years */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                     <Calendar className="w-4 h-4 mr-1" />
                     Investment Period (Years)
                   </label>
@@ -260,36 +282,24 @@ function SIPCalculator() {
                     min="1"
                     max="40"
                     value={years}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === "") {
-                        setYears("");
-                      } else {
-                        setYears(Number(value));
-                      }
-                    }}
-                    className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 text-lg"
+                    onChange={(e) =>
+                      setYears(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-lg text-black"
                   />
                   <input
                     type="range"
                     min="1"
                     max="40"
                     value={years}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === "") {
-                        setYears("");
-                      } else {
-                        setYears(Number(value));
-                      }
-                    }}
+                    onChange={(e) => setYears(Number(e.target.value))}
                     className="w-full mt-2 h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                   />
                 </div>
 
                 {/* Expected Return */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                     <Percent className="w-4 h-4 mr-1" />
                     Expected Annual Return (%)
                   </label>
@@ -299,15 +309,10 @@ function SIPCalculator() {
                     max="100"
                     step="0.5"
                     value={expectedReturn}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === "") {
-                        setExpectedReturn("");
-                      } else {
-                        setExpectedReturn(Number(value));
-                      }
-                    }}
-                    className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 text-lg"
+                    onChange={(e) =>
+                      setExpectedReturn(e.target.value === "" ? "" : Number(e.target.value))
+                    }
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 text-lg text-black"
                   />
                   <input
                     type="range"
@@ -315,14 +320,7 @@ function SIPCalculator() {
                     max="100"
                     step="0.5"
                     value={expectedReturn}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value === "") {
-                        setExpectedReturn("");
-                      } else {
-                        setExpectedReturn(Number(value));
-                      }
-                    }}
+                    onChange={(e) => setExpectedReturn(Number(e.target.value))}
                     className="w-full mt-2 h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                   />
                 </div>
@@ -334,6 +332,7 @@ function SIPCalculator() {
           <div className="lg:col-span-2">
             {results && (
               <>
+                {/* Results Summary */}
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div className="bg-white p-4 rounded-xl shadow-md ring-2 ring-blue-200">
                     <p className="text-sm text-gray-500">Total Invested</p>
@@ -356,7 +355,7 @@ function SIPCalculator() {
                 </div>
 
                 {/* Charts */}
-                <div className="text-black grid sm:grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div className="bg-white p-4 rounded-xl shadow-md ring-2 ring-blue-200">
                     <h3 className="font-semibold mb-2">Investment Growth</h3>
                     <div className="h-64 sm:h-80 overflow-x-auto">
