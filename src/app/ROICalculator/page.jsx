@@ -79,7 +79,7 @@ export default function ROICalculatorApp() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-30 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-35 px-4">
       <div className="bg-white shadow-xl rounded-2xl p-6 md:p-8 w-full max-w-6xl text-center text-slate-800">
         <h2 className="text-3xl font-bold mb-8 text-purple-600">ROI Calculator</h2>
 
