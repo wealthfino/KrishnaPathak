@@ -3,6 +3,15 @@
 import React from "react";
 
 const ComplaintsBoardPage = () => {
+  function getPreviousMonth() {
+  const date = new Date();
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const prevMonthIndex = (date.getMonth() - 1 + 12) % 12;
+  return monthNames[prevMonthIndex];
+}
   return (
     <div className="text-[#18181b] text-base space-y-8">
       <div>
@@ -14,7 +23,7 @@ const ComplaintsBoardPage = () => {
       {/* Table 1 */}
       <div>
         <h2 className="text-xl text-blue-50 font-bold mb-4">
-          Data for the month ending - June 2025
+          Data for the month ending - {getPreviousMonth()} 2025
         </h2>
         <div className="overflow-x-auto scroll-hidden">
           <table className="w-full border border-[#18181b]">
