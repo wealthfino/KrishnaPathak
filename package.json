@@ -16,7 +16,7 @@
     "@vercel/analytics": "^1.5.0",
     "chart.js": "^4.5.0",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.16.0",
+    "framer-motion": "^12.23.0",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.513.0",
     "motion": "^12.16.0",

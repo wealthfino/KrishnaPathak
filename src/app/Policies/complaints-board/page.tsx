@@ -14,7 +14,7 @@ const ComplaintsBoardPage = () => {
       {/* Table 1 */}
       <div>
         <h2 className="text-xl text-blue-50 font-bold mb-4">
-          Data for the month ending - May 2025
+          Data for the month ending - June 2025
         </h2>
         <div className="overflow-x-auto scroll-hidden">
           <table className="w-full border border-[#18181b]">
