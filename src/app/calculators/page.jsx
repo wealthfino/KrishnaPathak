@@ -90,8 +90,14 @@ const calculators = [
   },
   {
     title: "Risk Calculator",
-    description: "Calculate new share price and quantity after a stock split.",
+    description: "Determine your trading risk-reward ratio and visualize trade logic.",
     href: "/RiskCalculator",
+    color: "text-green-600",
+  },
+  {
+    title: "Net Worth Calculator",
+    description: "Know your financial health by subtracting your liabilities from your assets.",
+    href: "/NetWorthCalculator",
     color: "text-green-600",
   },
 ];
