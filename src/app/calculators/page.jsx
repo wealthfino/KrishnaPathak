@@ -88,4 +88,10 @@ const calculators = [
     href: "/SpiltCalculator",
     color: "text-green-600",
   },
+  {
+    title: "Risk Calculator",
+    description: "Calculate new share price and quantity after a stock split.",
+    href: "/RiskCalculator",
+    color: "text-green-600",
+  },
 ];
