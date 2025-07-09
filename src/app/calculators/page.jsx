@@ -74,7 +74,7 @@ const calculators = [
     title: "ROI Calculator",
     description: "Calculate return on investment over time.",
     href: "/ROICalculator",
-    color: "text-purple-600",
+    color: "text-blue-600",
   },
   {
     title: "EMI Calculator",
