@@ -178,7 +178,9 @@ const Footer = () => {
               <br />
               SEBI Registered Research Analyst
               <br />
-              SEBI Reg. No. INH300009914
+              SEBI Reg. No : INH300009914
+              <br/>
+              BSE Enlistment No : 5590
             </p>
           </div>
 

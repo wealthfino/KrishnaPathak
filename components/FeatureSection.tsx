@@ -91,7 +91,7 @@ const FeatureSection = () => {
           <FeatureCardVariant
             name="Trade with Logic"
             quote="Stay updated with research-based insights and market learning"
-            image="/assets/Imagess/tradelogic.jpg"
+            image="/assets/Imagess/tradelogic1.jpg"
             points={[
               "Define Clear Entry & Exit Rules",
               "Rely on Data, Not Emotions",
@@ -117,7 +117,7 @@ const FeatureSection = () => {
           <FeatureCardVariant
             name="WealthFino Mobile App"
             quote="Easily track your trades with a simple and user-friendly mobile interface."
-            image="/assets/Imagess/mobileview1.jpg"
+            image="/assets/Imagess/mobileView2.jpg"
             points={[
               "Smart & Simple Interface",
               "Daily FREE Research Insight",
