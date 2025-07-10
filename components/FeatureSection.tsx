@@ -7,6 +7,7 @@ import { FeatureCard } from "./FeatureCard";
 import { InfiniteMovingFeatureCards } from "./ui/moving-feature-cards";
 import { FeatureCardVariant } from "./FeatureCardVariant";
 
+
 const FeatureSection = () => {
   return (
     <div className="bg-[#18181b] pt-20">
@@ -77,7 +78,7 @@ const FeatureSection = () => {
           <FeatureCardVariant
             name="Community Engagement"
             quote="Connect, discuss, and learn with a vibrant trading community."
-            image="/assets/feature_2.png"
+            image="/assets/Imagess/comunity.jpg"
             points={[
               "Safe & respectful environment",
               "Live discussions",
@@ -90,7 +91,7 @@ const FeatureSection = () => {
           <FeatureCardVariant
             name="Trade with Logic"
             quote="Stay updated with research-based insights and market learning"
-            image="/assets/feature_4.png"
+            image="/assets/Imagess/tradelogic.jpg"
             points={[
               "Define Clear Entry & Exit Rules",
               "Rely on Data, Not Emotions",
@@ -103,7 +104,7 @@ const FeatureSection = () => {
           <FeatureCardVariant
             name="Daily Market View"
             quote="Improve your knowledge with daily educational content and insights."
-            image="/assets/feature_5.png"
+            image="/assets/Imagess/marketview.jpg"
             points={[
               "Top Gainers & Losers",
               "Trends, Sectors & Movers",
@@ -116,7 +117,7 @@ const FeatureSection = () => {
           <FeatureCardVariant
             name="WealthFino Mobile App"
             quote="Easily track your trades with a simple and user-friendly mobile interface."
-            image="/assets/feature_6.png"
+            image="/assets/Imagess/mobileview1.jpg"
             points={[
               "Smart & Simple Interface",
               "Daily FREE Research Insight",

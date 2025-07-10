@@ -31,15 +31,15 @@ export const FeatureCardVariant: React.FC<FeatureCardProps> = ({
           <div className="w-full">
             {/* Image Container */}
             <div className="w-full h-[120px] sm:h-[140px] md:h-[160px] mb-3 sm:mb-4">
-              <div className="h-full flex justify-center items-center relative p-1 sm:p-2 bg-blue-200 rounded-lg">
-                <Image
-                  src={image}
-                  alt={name}
-                  width={180}
-                  height={120}
-                  className="rounded-xl object-contain w-auto h-full"
-                />
-              </div>
+              <div className="h-full flex justify-center items-center relative p-1 sm:p-2 bg-blue-200 rounded-lg overflow-hidden">
+  <Image
+    src={image}
+    alt={name}
+    width={180}
+    height={120}
+    className="rounded-xl object-fill w-full h-full"
+  />
+</div>
             </div>
 
             {/* Text Content */}
