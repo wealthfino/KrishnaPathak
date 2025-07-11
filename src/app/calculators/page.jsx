@@ -2,6 +2,9 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import BlurText from "../Animations/BlurText"
+import { AuroraBackground } from '../../../components/ui/aurora-background';
+
+
 
 const loadMotion = async () => {
   const mod = await import('framer-motion');
@@ -20,7 +23,10 @@ export default function CalculatorsPage() {
   const MotionCard = motionA;
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 px-4 py-40">
+      <AuroraBackground className="pt-20 md:pt-10 min-h-screen">
+
+     
+    <div className="min-h-screen text-gray-900 px-4 py-40">
       <div className="max-w-6xl mx-auto text-center">
         <h1 className="text-4xl font-bold mb-12 text-center">
   <BlurText
@@ -28,7 +34,7 @@ export default function CalculatorsPage() {
     delay={150}
     animateBy="words"
     direction="top"
-    className=""
+    className="text-white"
   />
 </h1>
 
@@ -60,6 +66,7 @@ export default function CalculatorsPage() {
         </div>
       </div>
     </div>
+     </AuroraBackground>
   );
 }
 

@@ -7,6 +7,12 @@ import { motion } from "framer-motion";
 import { MailCheck, Zap, DownloadCloud } from "lucide-react";
 import { BackgroundGradient } from "../../../components/ui/background-gradient";
 
+// ✅ Phone number validation
+const validatePhoneNumber = (phone: string) => {
+  const regex = /^\d{10,15}$/;
+  return regex.test(phone);
+};
+
 export default function ResourceDownloadPage() {
   const [formData, setFormData] = useState({
     first_name: "",
@@ -19,11 +25,27 @@ export default function ResourceDownloadPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Allow only numbers for phone field
+    if (name === "phone") {
+      const onlyNums = value.replace(/\D/g, "");
+      if (onlyNums.length <= 10) {
+        setFormData((prev) => ({ ...prev, [name]: onlyNums }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // ✅ Validate phone number
+    if (!validatePhoneNumber(formData.phone)) {
+      toast.error("Please enter a valid phone number (10-15 digits).");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -53,6 +75,8 @@ export default function ResourceDownloadPage() {
   return (
     <div className="min-h-[800px] bg-blue-50 flex flex-col items-center justify-center py-20 px-4">
       <ToastContainer position="bottom-right" autoClose={3000} />
+
+      {/* Header Section */}
       <motion.div
         className="relative z-10 text-center mb-14 px-4"
         initial={{ opacity: 0, y: 40 }}
@@ -61,27 +85,23 @@ export default function ResourceDownloadPage() {
         viewport={{ once: false }}
       >
         <div className="inline-flex flex-col justify-center text-center mb-12">
-          {/* Top Left Decorative Line */}
           <div className="w-24 h-1 bg-[#1f2b5e] rounded-full mb-2" />
-
-          {/* Heading */}
           <h2 className="text-4xl md:text-5xl text-[#1f2b5e] font-extrabold pb-3">
             <span className="animate-gradient bg-gradient-to-r from-[#1f2b5e] via-[#13B5E8] to-[#7ac678] bg-clip-text text-transparent px-1">
               Get Instant Access
-            </span>
-            {"  "}to Study Kit
+            </span>{" "}
+            to Study Kit
           </h2>
-
-          {/* Bottom Right Decorative Line */}
           <div className="w-24 h-1 bg-[#7ac678] rounded-full mt-2 ml-auto" />
         </div>
 
-        {/* Subheading */}
         <p className="text-base font-medium md:text-lg text-[#1f2b5e] max-w-2xl mx-auto">
           Get access to all the stock market study materials, trading
           strategies, analysis tools, and practice resources — absolutely free!
         </p>
       </motion.div>
+
+      {/* Thank You or Form */}
       {isSubmitted ? (
         <motion.div
           className="bg-[#18181b] text-white p-10 rounded-xl shadow-xl text-center max-w-xl"
@@ -89,12 +109,9 @@ export default function ResourceDownloadPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            🎊 Thank You! 🎊
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">🎊 Thank You! 🎊</h2>
           <p className="text-lg">
-            Your free stock market study kit has been emailed to you. Check your
-            inbox!
+            Your free stock market study kit has been emailed to you. Check your inbox!
           </p>
         </motion.div>
       ) : (
@@ -115,14 +132,10 @@ export default function ResourceDownloadPage() {
               content, and market insights to support your journey of learning
               and discipline in the market.
             </p>
-
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <DownloadCloud className="w-5 h-5 shrink-0" />
-                <span>
-                  Includes - Study materials on trading concepts and market
-                  learning.
-                </span>
+                <span>Includes - Study materials on trading concepts and market learning.</span>
               </div>
               <div className="flex items-center gap-4">
                 <MailCheck className="w-5 h-5 shrink-0" />
@@ -135,7 +148,7 @@ export default function ResourceDownloadPage() {
             </div>
           </div>
 
-          {/* Right Panel */}
+          {/* Right Panel (Form) */}
           <div className="flex flex-col justify-center p-8 bg-gradient-to-br from-[#18181b] to-white/20 text-blue-50">
             <h2 className="text-2xl md:text-3xl font-semibold mb-6">
               Fill in Your Details
@@ -161,6 +174,7 @@ export default function ResourceDownloadPage() {
                   required
                 />
               </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <input
                   type="email"
@@ -171,16 +185,27 @@ export default function ResourceDownloadPage() {
                   className="w-full px-4 py-2 border-b text-blue-50 focus:outline-none border-blue-50"
                   required
                 />
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Phone Number"
-                  className="w-full px-4 py-2 border-b text-blue-50 focus:outline-none border-blue-50"
-                  required
-                />
+                <div className="flex flex-col">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number"
+                    className="w-full px-4 py-2 border-b text-blue-50 focus:outline-none border-blue-50"
+                    required
+                    inputMode="numeric"
+                    pattern="\d{10,15}"
+                  />
+                  {formData.phone &&
+                    !validatePhoneNumber(formData.phone) && (
+                      <p className="text-red-400 text-sm mt-1">
+                        Phone number must be 10 digits.
+                      </p>
+                    )}
+                </div>
               </div>
+
               <button
                 className="w-full mt-6"
                 type="submit"
