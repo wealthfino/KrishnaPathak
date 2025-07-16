@@ -1,72 +1,52 @@
 'use client';
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
-import BlurText from "../Animations/BlurText"
+
+import { useRouter } from 'next/navigation';
+import BlurText from "../Animations/BlurText";
 import { AuroraBackground } from '../../../components/ui/aurora-background';
 
-
-
-const loadMotion = async () => {
-  const mod = await import('framer-motion');
-  return mod.motion;
-};
-
 export default function CalculatorsPage() {
-  const [motionA, setMotionA] = useState(null);
+  const router = useRouter();
 
-  useEffect(() => {
-    loadMotion().then((m) => setMotionA(() => m.a));
-  }, []);
-
-  if (!motionA) return null;
-
-  const MotionCard = motionA;
+  const handleClick = (href) => {
+    router.push(href);
+  };
 
   return (
-      <AuroraBackground className="pt-20 md:pt-10 min-h-screen">
+    <div className="pt-20 md:pt-10 min-h-screen">
+      <div className="min-h-screen text-gray-900 px-4 py-40">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl font-bold mb-12 text-center">
+            <BlurText
+              text="All Calculators"
+              delay={150}
+              animateBy="words"
+              direction="top"
+              className="text-white"
+            />
+          </h1>
 
-     
-    <div className="min-h-screen text-gray-900 px-4 py-40">
-      <div className="max-w-6xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-12 text-center">
-  <BlurText
-    text="All Calculators"
-    delay={150}
-    animateBy="words"
-    direction="top"
-    className="text-white"
-  />
-</h1>
-
-
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {calculators.map((calc, index) => (
-            <MotionCard
-              key={calc.title}
-              href={calc.href}
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.15,
-                ease: 'easeOut',
-              }}
-              whileHover={{
-                scale: 1.03,
-                boxShadow: '0 12px 25px rgba(0,0,0,0.15)',
-              }}
-              className="block p-6 rounded-2xl bg-white shadow-md transition-all duration-300 text-left"
-            >
-              <h2 className={`text-xl font-semibold ${calc.color}`}>
-                {calc.title}
-              </h2>
-              <p className="text-sm mt-3 text-gray-600">{calc.description}</p>
-            </MotionCard>
-          ))}
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {calculators.map((calc) => (
+              <div
+                key={calc.title}
+                role="button"
+                tabIndex={0}
+                onClick={() => handleClick(calc.href)}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(calc.href)}
+                className="cursor-pointer block p-6 rounded-2xl bg-white shadow-md text-left border border-gray-200 hover:shadow-lg hover:scale-[1.02] transition"
+              >
+                <h2 className={`text-xl font-semibold ${calc.color}`}>
+                  {calc.title}
+                </h2>
+                <p className="text-sm mt-3 text-gray-600">
+                  {calc.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-     </AuroraBackground>
   );
 }
 
@@ -92,7 +72,7 @@ const calculators = [
   {
     title: "Split Calculator",
     description: "Calculate new share price and quantity after a stock split.",
-    href: "/SpiltCalculator",
+    href: "/SpiltCalculator", // typo? should this be "/SplitCalculator"?
     color: "text-green-600",
   },
   {
