@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "WealthFino",
   description:
-    "Professional trading consultant offering expert strategies, market analysis, and financial solutions.",
+    "Providing stock market analysis, research-based recommendations and model portfolios.",
   icons: {
     icon: "/assets/logo.png",
   },
