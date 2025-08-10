@@ -87,4 +87,10 @@ const calculators = [
     href: "/NetWorthCalculator",
     color: "text-green-600",
   },
+  {
+    title: "Gold Calculator",
+    description: "Know your financial health by subtracting your liabilities from your assets.",
+    href: "/GoldCalculator",
+    color: "text-yellow-500",
+  },
 ];
