@@ -6,6 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 import { MailCheck, Zap, DownloadCloud } from "lucide-react";
 import { BackgroundGradient } from "../../../components/ui/background-gradient";
+import { createClient } from "@supabase/supabase-js";
+
+// ✅ Supabase client (client-side safe)
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 // ✅ Phone number validation
 const validatePhoneNumber = (phone: string) => {
@@ -26,10 +33,9 @@ export default function ResourceDownloadPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Allow only numbers for phone field
     if (name === "phone") {
       const onlyNums = value.replace(/\D/g, "");
-      if (onlyNums.length <= 10) {
+      if (onlyNums.length <= 15) {
         setFormData((prev) => ({ ...prev, [name]: onlyNums }));
       }
     } else {
@@ -40,7 +46,6 @@ export default function ResourceDownloadPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // ✅ Validate phone number
     if (!validatePhoneNumber(formData.phone)) {
       toast.error("Please enter a valid phone number (10-15 digits).");
       return;
@@ -49,23 +54,20 @@ export default function ResourceDownloadPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/submit-resources-form", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // ✅ Insert data directly into Supabase
+      const { data, error } = await supabase
+        .from("resource_downloads")
+        .insert([formData]);
 
-      if (!response.ok) {
-        const { error } = await response.json();
-        toast.error(error || "Submission failed.");
-        setIsSubmitting(false);
-        return;
+      if (error) {
+        console.error(error);
+        toast.error("Submission failed.");
+      } else {
+        toast.success("Download link sent to your email!");
+        setIsSubmitted(true);
       }
-
-      toast.success("Download link sent to your email!");
-      setIsSubmitted(true);
     } catch (err) {
-      console.error("Submission failed", err);
+      console.error(err);
       toast.error("Something went wrong!");
     } finally {
       setIsSubmitting(false);
@@ -200,7 +202,7 @@ export default function ResourceDownloadPage() {
                   {formData.phone &&
                     !validatePhoneNumber(formData.phone) && (
                       <p className="text-red-400 text-sm mt-1">
-                        Phone number must be 10 digits.
+                        Phone number must be 10-15 digits.
                       </p>
                     )}
                 </div>

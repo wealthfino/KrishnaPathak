@@ -21,7 +21,7 @@ export default function HomePage() {
       <WhyChooseUs />
       <StocksHeatmap />
       <StockChart />
-      <Reviews />
+      {/* <Reviews /> */}
       <YoutubeSection />
       <PricingPage />
       <AboutUs />
