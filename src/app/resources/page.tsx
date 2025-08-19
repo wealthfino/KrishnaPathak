@@ -59,6 +59,19 @@ export default function ResourceDownloadPage() {
         .from("resource_downloads")
         .insert([formData]);
 
+        const res = await fetch("https://krishnapathak-git-main-krishna-pathaks-projects-72ea519d.vercel.app/api/submit-resources-form", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({
+          firstName: formData.first_name,
+          lastName: formData.last_name,
+          email: formData.email,
+          phone: formData.phone,
+        }),
+    });
+
+    
+
       if (error) {
         console.error(error);
         toast.error("Submission failed.");

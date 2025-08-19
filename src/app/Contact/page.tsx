@@ -58,7 +58,7 @@ const ContactPage = () => {
 
     // Send admin notification email
     try {
-      await fetch("/api/send-admin-email", {
+      await fetch("https://krishnapathak-git-main-krishna-pathaks-projects-72ea519d.vercel.app/api/send-admin-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
