@@ -2,18 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "../../../../lib/supabaseClient";
 import nodemailer from "nodemailer";
 
-// CORS headers
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://krishnapathak-git-main-krishna-pathaks-projects-72ea519d.vercel.app", // ✅ safer than "*"
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
-// Handle preflight OPTIONS request
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
-}
-
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
@@ -24,10 +12,7 @@ export async function POST(req: NextRequest) {
       { first_name, last_name, phone, email },
     ]);
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500, headers: corsHeaders }
-      );
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     // Download link from env
@@ -53,21 +38,26 @@ export async function POST(req: NextRequest) {
         <div style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 40px 20px; color: #1f2b5e;">
           <div style="max-width: 600px; margin: 0 auto; text-align: left;">
             <p style="font-size: 18px; margin: 0 0 16px;">Hi ${first_name} 👋,</p>
+
             <p style="font-size: 18px; margin: 0 0 16px;">
               Thank you for requesting our <strong>"Stock Market Study Kit"</strong>!
             </p>
+
             <div style="text-align: center; margin: 24px 0;">
               <a href="${downloadUrl}" 
                 style="display: inline-block; background-color: #7ac678; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 16px;">
                 Download Study Kit
               </a>
             </div>
+
             <p style="font-size: 16px; margin: 0 0 16px;">
               This free bundle includes curated eBooks, trading strategies, and insights to kickstart and boost your trading journey.
             </p>
+
             <p style="font-size: 14px; margin: 0 0 24px;">
               Happy learning and trading,<br /><strong>Team WealthFino</strong>
             </p>
+
             <p style="font-size: 13px; color: #888; text-align: center; margin: 0;">
               &copy; 2025 WealthFino. All rights reserved.
             </p>
@@ -81,13 +71,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { message: "Form submitted and email sent." },
-      { status: 200, headers: corsHeaders }
+      { status: 200 }
     );
   } catch (e: any) {
     console.error("Email sending error:", e);
-    return NextResponse.json(
-      { error: "Failed to send email." },
-      { status: 500, headers: corsHeaders }
-    );
+    return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
   }
 }
