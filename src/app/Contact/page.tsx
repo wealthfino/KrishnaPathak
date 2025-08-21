@@ -23,6 +23,7 @@ const ContactPage = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -40,6 +41,7 @@ const ContactPage = () => {
       return;
     }
 
+    // Save form data in Supabase
     const { error } = await supabase.from("contact_messages").insert({
       first_name: formData.firstName,
       last_name: formData.lastName,
@@ -56,20 +58,17 @@ const ContactPage = () => {
       return;
     }
 
-    // Send admin notification email
+    // Call API to send admin email
     try {
-      await fetch("https://krishnapathak-git-main-krishna-pathaks-projects-72ea519d.vercel.app/api/send-admin-email", {
+      const res = await fetch("https://krishnapathak-git-main-krishna-pathaks-projects-72ea519d.vercel.app/api/send-admin-email", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
+
+      if (!res.ok) {
+        throw new Error("Failed to send email");
+      }
     } catch (err) {
       console.error("Failed to send email to admin:", err);
     }
@@ -89,6 +88,9 @@ const ContactPage = () => {
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col items-center justify-center pt-40 pb-20 px-4 md:px-10">
       <ToastContainer position="bottom-right" autoClose={3000} />
+
+      {/* --- All UI below is kept same as your version --- */}
+      {/* Header Section */}
       <motion.div
         className="relative z-10 text-center mb-14 px-4"
         initial={{ opacity: 0, y: 40 }}
@@ -97,29 +99,23 @@ const ContactPage = () => {
         viewport={{ once: false }}
       >
         <div className="inline-flex flex-col justify-center text-center mb-12">
-          {/* Top Left Decorative Line */}
           <div className="w-24 h-1 bg-[#1f2b5e] rounded-full mb-2" />
-
-          {/* Heading */}
           <h2 className="text-4xl md:text-5xl text-[#1f2b5e] font-extrabold pb-3">
             <span className="animate-gradient bg-gradient-to-r from-[#1f2b5e] via-[#13B5E8] to-[#7ac678] bg-clip-text text-transparent px-1">
               Contact
-            </span>
-            {"  "}Us
+            </span>{" "}
+            Us
           </h2>
-
-          {/* Bottom Right Decorative Line */}
           <div className="w-24 h-1 bg-[#7ac678] rounded-full mt-2 ml-auto" />
         </div>
-
-        {/* Subheading */}
         <p className="text-base font-medium md:text-lg text-[#1f2b5e] max-w-2xl mx-auto">
           Have any questions, feedback, or need support? Don't hesitate to reach
-          out. Our team is here to assist you and provide the help you
-          need—anytime.
+          out. Our team is here to assist you and provide the help you need—
+          anytime.
         </p>
       </motion.div>
 
+      {/* Contact Card */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -136,7 +132,6 @@ const ContactPage = () => {
             Our friendly team is ready to assist you with any questions or
             concerns you may have.
           </p>
-
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               <Phone className="w-5 h-5 shrink-0" />
@@ -160,7 +155,7 @@ const ContactPage = () => {
           </div>
         </div>
 
-        {/* Right Panel */}
+        {/* Right Panel - Form */}
         <div className="flex flex-col justify-center p-8 bg-gradient-to-br from-[#18181b] to-white/20 text-blue-50">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6">
             Get In Touch
@@ -243,8 +238,7 @@ const ContactPage = () => {
         </div>
       </motion.div>
 
-      {/* Disclaimer Section */}
-      <motion.div
+     <motion.div
         className="relative z-10 mt-20 max-w-6xl text-center italic"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -378,6 +372,7 @@ const ContactPage = () => {
           ></iframe>
         </div>
       </motion.div>
+
     </div>
   );
 };
