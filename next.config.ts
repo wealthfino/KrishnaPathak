@@ -7,9 +7,10 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'export',
+  trailingSlash: true,   // ✅ ensures /page/ -> /page/index.html
   images: {
-    unoptimized: true
-  }
+    unoptimized: true,   // ✅ required for static export if using <Image>
+  },
 }
 
 module.exports = nextConfig;

@@ -18,9 +18,9 @@ const StockChart = () => {
     : {};
 
   return (
-    <div className="w-full flex justify-center items-center px-4 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 bg-blue-50">
+    <div className="w-full flex justify-center items-center px-4 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 ">
       <div className="w-full h-full flex justify-center items-center bg-[#18181b] py-8 px-4 md:p-10 lg:p-16 xl:p-20 rounded-3xl">
-        <motion.div {...motionProps} className="w-full max-w-[1200px]">
+        <motion.div {...motionProps} className="w-[95vw] max-w-[100vw]">
           {" "}
           {/* You can increase this value as needed */}
           <BackgroundGradient className="w-full h-full flex justify-center items-center mx-auto">
@@ -31,11 +31,11 @@ const StockChart = () => {
                 {/* Content with solid background (adjust color as needed) */}
                 <div className="relative z-10 bg-transparent px-4 lg:px-10 rounded-md">
                   <h1 className="text-center text-[#0f1117] text-[30px] md:text-[50px] font-bold">
-                    STOCK CHART
+                    WealthFino 
                   </h1>
                 </div>
               </div>
-              <div className="bg-gradient-to-tl from-[#1f2b5e] via-[#13B5E8] to-[#7ac678] rounded-xl shadow-lg h-[500px] lg:h-[600px] p-[6px] w-full">
+              <div className="bg-gradient-to-tl from-[#1f2b5e] via-[#13B5E8] to-[#7ac678] rounded-xl shadow-lg h-[600px] lg:h-[500px] w-[90vw] p-1">
                 <TradingViewWidgetChart />
               </div>
             </div>

@@ -10,7 +10,8 @@ export const policies = [
   { title: "Disclaimer for Website", slug: "disclaimer-website" },
   { title: "Social Media Disclaimers", slug: "social-disclaimers" },
   { title: "Legal & Risk Disclosure", slug: "legal-disclosure" },
-  { title: "Refund & Cancellation Policy", slug: "refund-cancellation" },
+  { title: "Refund Policy", slug: "refund-policy" },
+  { title: "Cancellation Policy", slug: "cancellation-policy" },
   { title: "Internal Policy on Conflict of Interest", slug: "internal-policy" },
   
   // ... add more (if needed)

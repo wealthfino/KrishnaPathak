@@ -66,7 +66,7 @@ const logos = [
 const MediaPresence = () => {
   return (
     <section className="py-16 bg-blue-50 relative overflow-hidden">
-      {/* Accent Glow & Heading */}
+      {/* Heading */}
       <motion.div
         className="relative z-10 text-center mb-14 px-4"
         initial={{ opacity: 0, y: 40 }}
@@ -75,22 +75,15 @@ const MediaPresence = () => {
         viewport={{ once: false }}
       >
         <div className="inline-flex flex-col justify-center text-center mb-12">
-          {/* Top Left Decorative Line */}
           <div className="w-24 h-1 bg-[#1f2b5e] rounded-full mb-2" />
-
-          {/* Heading */}
           <h2 className="text-4xl md:text-5xl text-[#1f2b5e] font-extrabold pb-3">
             <span className="animate-gradient bg-gradient-to-r from-[#1f2b5e] via-[#13B5E8] to-[#7ac678] bg-clip-text text-transparent px-1">
               Featured
-            </span>
-            {"  "}In
+            </span>{" "}
+            In
           </h2>
-
-          {/* Bottom Right Decorative Line */}
           <div className="w-24 h-1 bg-[#7ac678] rounded-full mt-2 ml-auto" />
         </div>
-
-        {/* Subheading */}
         <p className="text-base font-medium md:text-lg text-[#1f2b5e] max-w-2xl mx-auto">
           We're proud to be recognized by leading business & financial
           platforms. Our Insights are making headlines - featured by the most
@@ -98,9 +91,10 @@ const MediaPresence = () => {
         </p>
       </motion.div>
 
+      {/* Logos Carousel */}
       <div className="relative w-full overflow-hidden">
         <motion.div
-          className="flex gap-12 pr-12 w-max"
+          className="flex gap-10 pr-10 w-max"
           animate={{ x: ["0%", "-50%"] }}
           transition={{
             repeat: Infinity,
@@ -120,18 +114,18 @@ const MediaPresence = () => {
                   <Image
                     src={logo.src}
                     alt={logo.alt}
-                    width={150}
-                    height={45}
-                    className="h-auto w-auto object-contain transition duration-500 cursor-pointer"
+                    width={100}
+                    height={85}
+                    className="h-7 md:h-15 w-auto object-contain transition duration-500 cursor-pointer"
                   />
                 </Link>
               ) : (
                 <Image
                   src={logo.src}
                   alt={logo.alt}
-                  width={150}
-                  height={45}
-                  className="h-auto w-auto object-contain transition duration-500 cursor-pointer"
+                  width={100}
+                  height={85}
+                  className="h-6 md:h-8 w-auto object-contain transition duration-500 cursor-pointer"
                 />
               )}
             </div>

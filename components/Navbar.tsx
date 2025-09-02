@@ -1,44 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
 import { BackgroundGradient } from "./ui/background-gradient";
 import { useLoading } from "@/app/context/LoadingContext";
 
 const navItems = [
   { name: "Home", path: "/" },
+  { name: "Blogs", path: "/Blogs" },
   { name: "Charts", path: "/Charts" },
   { name: "About", path: "/About" },
   { name: "Pricing", path: "/Subscription" },
   { name: "Policies", path: "/Policies" },
   { name: "Contact", path: "/Contact" },
 ];
-
-// Variants for mobile nav wrapper
-const mobileMenuVariants = {
-  closed: { height: 0, opacity: 0 },
-  open: {
-    height: "auto",
-    opacity: 1,
-    transition: {
-      duration: 0.4,
-      ease: "easeInOut",
-      when: "beforeChildren",
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-// Variants for mobile nav items
-const itemVariants = {
-  closed: { opacity: 0, y: -10 },
-  open: { opacity: 1, y: 0 },
-};
 
 export default function Navbar() {
   const router = useRouter();
@@ -47,6 +25,40 @@ export default function Navbar() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { setIsLoading } = useLoading();
 
+  // 👇 scroll state
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        // scrolling down → hide navbar
+        setShowNavbar(false);
+      } else {
+        // scrolling up → show navbar
+        setShowNavbar(true);
+      }
+
+      // 👇 auto show after stop scrolling
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        setShowNavbar(true);
+      }, 500); // delay before showing again
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeout);
+    };
+  }, [lastScrollY]);
+
   useEffect(() => {
     setIsLoading(false);
     setIsOpen(false);
@@ -54,10 +66,10 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeInOut" }}
-      className="w-full md:h-[80px] fixed top-[46px] z-50 bg-white/40 backdrop-blur-3xl shadow-lg px-4 sm:px-8 py-2 md:py-4"
+      initial={{ y: 0 }}
+      animate={{ y: showNavbar ? 0 : -120 }} // 👈 slide up/down
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="w-full md:h-[80px] fixed top-8 z-50 bg-white/70 backdrop-blur-3xl shadow-lg px-4 sm:px-8 py-2 md:py-4"
     >
       <div className="max-w-7xl md:h-full mx-auto flex items-center justify-between">
         {/* Logo */}
@@ -93,7 +105,7 @@ export default function Navbar() {
                 onMouseEnter={() => setHoveredIndex(idx)}
                 className="relative px-2 lg:px-4 py-1"
               >
-                {/* Background animation */}
+                {/* Background hover animation */}
                 {hoveredIndex === idx && (
                   <motion.div
                     layoutId="nav-hover"
@@ -147,23 +159,22 @@ export default function Navbar() {
         {isOpen && (
           <motion.div
             key="mobile-menu"
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={mobileMenuVariants}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
             className="md:hidden flex flex-col text-center"
           >
             {navItems.map((item) => (
               <motion.div
                 key={item.path}
-                variants={itemVariants}
                 className={`text-lg font-semibold py-2 mb-5 bg-transparent border rounded-lg shadow-lg ${
                   pathname === item.path ||
                   (item.path === "/Policies" &&
                     pathname.startsWith("/Policies"))
                     ? "text-green-500 border-green-500"
-                    : "text-[#1f2b5e] border-[#1f2b5e]"
-                }`}
+                    : "text-[#1f2b5e] border-[#1f2b5e]"}
+                `}
               >
                 <span
                   onClick={() => {

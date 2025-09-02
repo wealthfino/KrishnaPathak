@@ -10,6 +10,7 @@ import { LoadingProvider } from "./context/LoadingContext";
 import Loader from "../../components/Loader";
 import CalculatorMenuButton from "../../components/CalculatorsButton";
 import WhatsAppButton from "../../components/WhatsAppButton";
+import Script from "next/script"; // ✅ Import Script
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "WealthFino",
   description:
-    "Providing stock market analysis, research-based recommendations and model portfolios.",
+    "Providing stock market analysis, research-based recommendations and model portfolios.",
   icons: {
     icon: "/assets/logo.png",
   },
@@ -37,6 +38,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* ✅ Google AdSense script inside <head> */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5492599411813635"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -58,6 +68,7 @@ export default function RootLayout({
             <Footer />
           </LoadingProvider>
         </ThemeProvider>
+
         <Analytics />
       </body>
     </html>
